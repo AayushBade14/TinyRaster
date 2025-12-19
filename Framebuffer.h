@@ -318,7 +318,7 @@ public:
 
   void BlitFramebuffer()
   {
-    std::string name = "frame_" + std::to_string(m_iBlitNum++) + ".ppm";
+    std::string name = "../frame_" + std::to_string(m_iBlitNum++) + ".ppm";
     std::ofstream file(name, std::ios::binary);
 
     if(!file) throw Invalid{};
