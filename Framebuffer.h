@@ -343,6 +343,152 @@ public:
       << std::endl;
     #endif
   }
+  
+  void PutWireframeTriangle(float x0, float y0, float x1, float y1, float x2, float y2, CP color)
+  {
+    PutLine(x0, y0, x1, y1, color);
+    PutLine(x1, y1, x2, y2, color);
+    PutLine(x0, y0, x2, y2, color);
+  }
+  
+  void PutWireframeTriangle(float x0, float y0, float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b)
+  {
+    PutLine(x0, y0, x1, y1, r, g, b);
+    PutLine(x1, y1, x2, y2, r, g, b);
+    PutLine(x0, y0, x2, y2, r, g, b);
+  }
+  
+  void PutFilledTriangle(float x0, float y0, float x1, float y1, float x2, float y2, CP color)
+  {
+    if(y1 < y0)
+    {
+      float tmp = x0;
+      x0 = x1;
+      x1 = tmp;
+
+      tmp = y0;
+      y0 = y1;
+      y1 = tmp;
+    }
+
+    if(y2 < y0)
+    {
+      float tmp = y0;
+      y0 = y2;
+      y2 = tmp;
+
+      tmp = x0;
+      x0 = x2;
+      x2 = tmp;
+    }
+
+    if(y2 < y1)
+    {
+      float tmp = y1;
+      y1 = y2;
+      y2 = tmp;
+
+      tmp = x1;
+      x1 = x2;
+      x2 = tmp;
+    }
+
+    std::vector<float> x01 = Interpolate(y0, x0, y1, x1);
+    std::vector<float> x12 = Interpolate(y1, x1, y2, x2);
+    std::vector<float> x02 = Interpolate(y0, x0, y2, x2);
+    
+    x01.pop_back();
+    x01.insert(x01.end(), x12.begin(), x12.end());
+    std::vector<float> x012 = x01;
+
+    std::vector<float> x_left;
+    std::vector<float> x_right;
+    int m = std::floor(x012.size()/2);
+    if(x02[m] < x012[m])
+    {
+      x_left = x02;
+      x_right = x012;
+    }
+    else
+    {
+      x_left = x012;
+      x_right = x02;
+    }
+
+    for(int y = (int)std::ceil(y0); y < (int)std::ceil(y2); y++)
+    {
+      for(int x = (int)x_left[y - y0]; x < (int)x_right[y - y0]; x++)
+      {
+        PutPixel(x, y, color);
+      }
+    }
+  }
+ 
+  void PutFilledTriangle(float x0, float y0, float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b)
+  {
+    if(y1 < y0)
+    {
+      float tmp = x0;
+      x0 = x1;
+      x1 = tmp;
+
+      tmp = y0;
+      y0 = y1;
+      y1 = tmp;
+    }
+
+    if(y2 < y0)
+    {
+      float tmp = y0;
+      y0 = y2;
+      y2 = tmp;
+
+      tmp = x0;
+      x0 = x2;
+      x2 = tmp;
+    }
+
+    if(y2 < y1)
+    {
+      float tmp = y1;
+      y1 = y2;
+      y2 = tmp;
+
+      tmp = x1;
+      x1 = x2;
+      x2 = tmp;
+    }
+
+    std::vector<float> x01 = Interpolate(y0, x0, y1, x1);
+    std::vector<float> x12 = Interpolate(y1, x1, y2, x2);
+    std::vector<float> x02 = Interpolate(y0, x0, y2, x2);
+    
+    x01.pop_back();
+    x01.insert(x01.end(), x12.begin(), x12.end());
+    std::vector<float> x012 = x01;
+
+    std::vector<float> x_left;
+    std::vector<float> x_right;
+    int m = std::floor(x012.size()/2);
+    if(x02[m] < x012[m])
+    {
+      x_left = x02;
+      x_right = x012;
+    }
+    else
+    {
+      x_left = x012;
+      x_right = x02;
+    }
+
+    for(int y = (int)std::ceil(y0); y < (int)std::ceil(y2); y++)
+    {
+      for(int x = (int)x_left[y - y0]; x < (int)x_right[y - y0]; x++)
+      {
+        PutPixel(x, y, r, g, b);
+      }
+    }
+  }
 
   void BlitFramebuffer()
   {
@@ -388,7 +534,7 @@ private:
 
     float d = d0;
 
-    for(int i = (int)i0; i < (int)i1; i++)
+    for(int i = (int)i0; i <= (int)i1; i++)
     {
       values.push_back(d);
       d = d + a;
