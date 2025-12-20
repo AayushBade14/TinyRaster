@@ -12,6 +12,8 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <cmath>
 #include "./Color.h"
 
 class Framebuffer
@@ -209,109 +211,106 @@ public:
     std::cout << "Pixel put into framebuffer at: (" << x << ", " << y << ")" << std::endl;
   }
   
-  void PutLine(int x0, int y0, int x1, int y1, CP color)
+  void PutLine(float x0, float y0, float x1, float y1, CP color)
   {
-    int dx = x1 - x0;
-    int dy = y1 - y0;
-
-    if(abs(dx) > abs(dy))
+    
+    if(std::fabs(x1 - x0) > std::abs(y1 - y0))
     {
-      float a = (float)dy/(float)dx;
-
+      //line is horizontal-ish
+      //making sure x0 < x1
       if(x0 > x1)
       {
-        x0 ^= x1;
-        x1 ^= x0;
-        x0 ^= x1;
-        y0 ^= y1;
-        y1 ^= y0;
-        y0 ^= y1;
+        float tmp = x0;
+        x0 = x1;
+        x1 = tmp;
+
+        tmp = y0;
+        y0 = y1;
+        y1 = tmp;
+
       }
 
-      float y = y0;
-      for(int x = x0; x < x1; x++)
-      {
-        PutPixel(x, (int)y, color);
-        y = y + a;
-      }
-    } 
-    else
-    {
-      float a = (float)dx/(float)dy;
+      std::vector<float> ys = Interpolate(x0, y0, x1, y1);
 
-      if(y0 > y1)
+      for(int x = (int)x0; x < (int)x1; x++)
       {
-        //swap
-        x0 ^= x1;
-        x1 ^= x0;
-        x0 ^= x1;
-        y0 ^= y1;
-        y1 ^= y0;
-        y0 ^= y1;
-      }
-
-      float x = x0;
-      for(int y = y0; y < y1; y++)
-      {
-        PutPixel((int)x, y, color);
-        x = x + a;
+        PutPixel(x, (int)ys[(int)(x - x0)], color);
       }
     }
+    else
+    {
+      //line is vertical-ish
+      //making sure y0 < y1
+      if(y0 > y1)
+      {
+        float tmp = x0;
+        x0 = x1;
+        x1 = tmp;
 
+        tmp = y0;
+        y0 = y1;
+        y1 = tmp;
+
+      }
+
+      std::vector<float> xs = Interpolate(y0, x0, y1, x1);
+
+      for(int y = (int)y0; y < (int)y1; y++)
+      {
+        PutPixel((int)xs[(int)(y - y0)], (int)y, color);
+      }
+    }
+    
     std::cout << "Rendered a line: (" << x0 << ", " << y0 << ") -> (" << x1 << ", " << y1 << ")"
       << std::endl;
   }
 
   void PutLine(int x0, int y0, int x1, int y1, uint8_t r, uint8_t g, uint8_t b)
   {
-    
-    int dx = x1 - x0;
-    int dy = y1 - y0;
-
-    if(abs(dx) > abs(dy))
+       if(std::fabs(x1 - x0) > std::fabs(y1 - y0))
     {
-      float a = (float)dy/(float)dx;
-
+      //line is horizontal-ish
+      //making sure x0 < x1
       if(x0 > x1)
       {
-        //swap
-        x0 ^= x1;
-        x1 ^= x0;
-        x0 ^= x1;
-        y0 ^= y1;
-        y1 ^= y0;
-        y0 ^= y1;
+        float tmp = x0;
+        x0 = x1;
+        x1 = tmp;
+
+        tmp = y0;
+        y0 = y1;
+        y1 = tmp;
       }
 
-      float y = y0;
-      for(int x = x0; x < x1; x++)
-      {
-        PutPixel(x, (int)y, r, g, b);
-        y = y + a;
-      }
-    } 
-    else
-    {
-      float a = (float)dx/(float)dy;
+      std::vector<float> ys = Interpolate(x0, y0, x1, y1);
 
-      if(y0 > y1)
+      for(int x = (int)x0; x < (int)x1; x++)
       {
-        x0 ^= x1;
-        x1 ^= x0;
-        x0 ^= x1;
-        y0 ^= y1;
-        y1 ^= y0;
-        y0 ^= y1;
-      }
-
-      float x = x0;
-      for(int y = y0; y < y1; y++)
-      {
-        PutPixel((int)x, y, r, g, b);
-        x = x + a;
+        PutPixel(x, (int)ys[(int)(x - x0)], r, g, b);
       }
     }
+    else
+    {
+      //line is vertical-ish
+      //making sure y0 < y1
+      if(y0 > y1)
+      {
+       float tmp = x0;
+        x0 = x1;
+        x1 = tmp;
 
+        tmp = y0;
+        y0 = y1;
+        y1 = tmp;
+      }
+
+      std::vector<float> xs = Interpolate(y0, x0, y1, x1);
+
+      for(int y = (int)y0; y < (int)y1; y++)
+      {
+        PutPixel((int)xs[(int)(y - y0)], (int)y, r, g, b);
+      }
+    }
     std::cout << "Rendered a line: (" << x0 << ", " << y0 << ") -> (" << x1 << ", " << y1 << ")"
       << std::endl;
   }
@@ -344,6 +343,30 @@ private:
   int m_iHeight;
   
   Color* m_pPixels;
+
+  std::vector<float> Interpolate(float i0, float d0, float i1, float d1)
+  {
+    float epsilon = 0.0001f;
+
+    if(abs(i0 - i1) <= epsilon)
+    {
+      return {d0};
+    }
+    
+    std::vector<float> values;
+
+    float a = (d1 - d0)/(i1 - i0);
+
+    float d = d0;
+
+    for(int i = (int)i0; i < (int)i1; i++)
+    {
+      values.push_back(d);
+      d = d + a;
+    }
+
+    return values;
+  }
 };
 
 #endif
