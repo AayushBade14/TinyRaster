@@ -1,12 +1,14 @@
 # TinyRaster
 
-![Rasterizer-Output-1](./line_raster0.png)
+![Rasterizer-Output-1](./triangle_raster0.png)
 ![Rasterizer-Output-2](./line_raster1.png)
 
 ## A small custom software rasterizer built from scratch using C++
 
 ### Features
-- A custom implementation for **framebuffer** which supports **clearing framebuffer with a color**, **point plotting on framebuffer**, and **line rasterization**
+- A custom implementation for **framebuffer** which supports **clearing framebuffer with a color**, **point plotting on framebuffer**
+- Supports **Line Rasterization**
+- Supports **Triangle Rasterization**
 - Output is directly written to a PPM file
 
 ### Further Developments
