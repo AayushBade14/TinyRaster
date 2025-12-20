@@ -6,6 +6,8 @@ project(
   LANGUAGES C CXX
 )
 
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+
 add_library(
   Framebuffer
   STATIC
@@ -20,5 +22,11 @@ target_link_libraries(
   tr
   PUBLIC
   Framebuffer
+)
+
+target_compile_definitions(
+  tr
+  PRIVATE
+  $<$<CONFIG:DEBUG>:DEBUG>
 )
 

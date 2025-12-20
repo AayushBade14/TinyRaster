@@ -19,6 +19,20 @@ cd TinyRaster
 mkdir Build
 cd Build
 cmake ..
+```
+
+### Debug Build
+```
+cmake -S ../ -B . -DCMAKE_BUILD_TYPE=DEBUG
 cmake --build .
+```
+
+### Release Build
+```
+cmake -S ../ -B . -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+```
+## Run
+```
 ./tr
 ```

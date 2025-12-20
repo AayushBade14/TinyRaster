@@ -31,7 +31,9 @@ public:
                   m_iWidth(0),
                   m_iHeight(0)
   {
+    #ifdef DEBUG
     std::cout << "Framebuffer init via default constructor!" << std::endl;
+    #endif
   }
 
   //default constructor with fbo size as parameters
@@ -41,17 +43,21 @@ public:
   {
     //Allocate memory to framebuffer
     m_pPixels = new Color[m_iWidth * m_iHeight];
-
+    
+    #ifdef DEBUG
     std::cout << "Framebuffer init via default constructor: " << m_iWidth << " * "
       << m_iHeight << std::endl;
+    #endif
   }
 
   //destructor for framebuffer
   ~Framebuffer()
   {
     delete[] m_pPixels;
-
+    
+    #ifdef DEBUG
     std::cout << "Framebuffer cleaned via destructor!" << std::endl;
+    #endif
   }
   
   //copy constructor and copy assignment for framebuffer
@@ -66,9 +72,11 @@ public:
     {
       m_pPixels[i] = other.m_pPixels[i];
     }
-
+    
+    #ifdef DEBUG
     std::cout << "Framebuffer init via copy constructor: " << m_iWidth << " * " 
       << m_iHeight << std::endl;
+    #endif
   }
 
   Framebuffer& operator=(const Framebuffer& other)
@@ -90,8 +98,10 @@ public:
       m_pPixels[i] = other.m_pPixels[i];
     }
     
+    #ifdef DEBUG
     std::cout << "Framebuffer init via copy assignment overload: " << m_iWidth << " * "
       << m_iHeight << std::endl;
+    #endif
 
     return *this;
   }
@@ -104,9 +114,11 @@ public:
     other.m_pPixels = nullptr;
     other.m_iWidth = 0;
     other.m_iHeight = 0;
-  
+    
+    #ifdef DEBUG
     std::cout << "Framebuffer init via move constructor: " << m_iWidth << " * "
       << m_iHeight << std::endl;
+    #endif  
   }
   
   Framebuffer& operator=(Framebuffer&& other)
@@ -125,8 +137,10 @@ public:
     other.m_iWidth = 0;
     other.m_iHeight = 0;
 
+    #ifdef DEBUG
     std::cout << "Framebuffer init via move operator overload: " << m_iWidth << " * "
       << m_iHeight << std::endl;
+    #endif
 
     return *this;
   }
@@ -156,9 +170,11 @@ public:
     m_iWidth = width;
     m_iHeight = height;
     m_pPixels = new Color[m_iWidth * m_iHeight];
-  
+    
+    #ifdef DEBUG
     std::cout << "Memory allocated to the framebuffer: " << m_iWidth << " * "
       << m_iHeight << std::endl;
+    #endif
   }
   
   //methods for clearing the framebuffer using a color preset or explicit rgb value
@@ -170,7 +186,9 @@ public:
       m_pPixels[i].SetColor(color);
     }
     
+    #ifdef DEBUG
     std::cout << "Framebuffer cleared to color: " << GetColorName(color) << std::endl;
+    #endif
   }
 
   void ClearFramebuffer(uint8_t r, uint8_t g, uint8_t b)
@@ -186,9 +204,11 @@ public:
     {
       m_pPixels[i].SetColor(r, g, b);
     }
-
+    
+    #ifdef DEBUG
     std::cout << "Framebuffer cleared to color: RGB(" << r << ", " << g << ", " << b << ")"
       << std::endl;
+    #endif  
   }
   
   void PutPixel(int x, int y, CP color)
@@ -197,8 +217,10 @@ public:
 
     int index = y * m_iWidth + x;
     m_pPixels[index].SetColor(color);
-
+    
+    #ifdef DEBUG
     std::cout << "Pixel put into framebuffer at: (" << x << ", " << y << ")" << std::endl;
+    #endif
   }
 
   void PutPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b)
@@ -207,8 +229,10 @@ public:
 
     int index = y * m_iWidth + x;
     m_pPixels[index].SetColor(r, g, b);
-
+    
+    #ifdef DEBUG
     std::cout << "Pixel put into framebuffer at: (" << x << ", " << y << ")" << std::endl;
+    #endif  
   }
   
   void PutLine(float x0, float y0, float x1, float y1, CP color)
@@ -261,8 +285,10 @@ public:
       }
     }
     
+    #ifdef DEBUG
     std::cout << "Rendered a line: (" << x0 << ", " << y0 << ") -> (" << x1 << ", " << y1 << ")"
       << std::endl;
+    #endif
   }
 
   void PutLine(int x0, int y0, int x1, int y1, uint8_t r, uint8_t g, uint8_t b)
@@ -311,8 +337,11 @@ public:
         PutPixel((int)xs[(int)(y - y0)], (int)y, r, g, b);
       }
     }
+
+    #ifdef DEBUG
     std::cout << "Rendered a line: (" << x0 << ", " << y0 << ") -> (" << x1 << ", " << y1 << ")"
       << std::endl;
+    #endif
   }
 
   void BlitFramebuffer()
