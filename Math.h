@@ -199,7 +199,7 @@ public:
 
   //vector-vector divisions
   Vec3 operator/(const Vec3& other)const{ return Vec3(m_fX / other.m_fX, m_fY / other.m_fY, m_fZ / other.m_fZ); }
-  Vec3& operator/=(const Vec2& other){ m_fX /= other.m_fX; m_fY /= other.m_fY; m_fZ /= other.m_fZ; return *this; }
+  Vec3& operator/=(const Vec3& other){ m_fX /= other.m_fX; m_fY /= other.m_fY; m_fZ /= other.m_fZ; return *this; }
 
   //dot-product method
   float Dot(const Vec3& other)const { return ((m_fX * other.m_fX) + (m_fY * other.m_fY) + (m_fZ * other.m_fZ)); }
@@ -282,7 +282,7 @@ inline Vec3 operator*(float val, const Vec3& v) { return Vec3(v.X() * val, v.Y()
 inline Vec3 Normalize(const Vec3& v)
 {
   float mag = sqrt(pow(v.X(), 2) + pow(v.Y(), 2) + pow(v.Z(), 2));
-  return Vec2(v.X()/mag, v.Y()/mag, v.Z()/mag);
+  return Vec3(v.X()/mag, v.Y()/mag, v.Z()/mag);
 }
 
 //method to get squared-norm of vec3 : |V|^2 = <V,V>

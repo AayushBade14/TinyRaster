@@ -262,12 +262,12 @@ public:
 
   void PutPixel(const Vec2& v, const Vec3& c)
   {
-    PutPixel(v, c.X(), c.Y(), x.Z());
+    PutPixel(v, c.X(), c.Y(), c.Z());
   }
 
   void PutPixel(int x, int y, const Vec3& c)
   {
-    PutPixel(x, y, c.X(), x.Y(), x.Z());
+    PutPixel(x, y, c.X(), c.Y(), c.Z());
   }
   
   void PutLine(float x0, float y0, float x1, float y1, CP color)
