@@ -54,6 +54,10 @@ public:
   //getters and setters
   float X(){ return m_fX; }
   float Y(){ return m_fY; }
+  
+  //getters for returning truncated x and y values
+  int iX(){return (int)m_fX; }
+  int iY(){return (int)m_fY; }
 
   void X(float x){ m_fX = x; }
   void Y(float y){ m_fY = y; }

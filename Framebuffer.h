@@ -15,6 +15,7 @@
 #include <vector>
 #include <cmath>
 #include "./Color.h"
+#include "./Math.h"
 
 class Framebuffer
 {
@@ -212,6 +213,18 @@ public:
   }
   
   void PutPixel(int x, int y, CP color)
+  {
+    if(x < 0 || x >= m_iWidth || y < 0 || y >= m_iHeight) return;
+
+    int index = y * m_iWidth + x;
+    m_pPixels[index].SetColor(color);
+    
+    #ifdef DEBUG
+    std::cout << "Pixel put into framebuffer at: (" << x << ", " << y << ")" << std::endl;
+    #endif
+  }
+
+  void PutPixel(const Vec2& v, CP color)
   {
     if(x < 0 || x >= m_iWidth || y < 0 || y >= m_iHeight) return;
 
