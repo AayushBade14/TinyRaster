@@ -318,44 +318,7 @@ public:
 
   void PutLine(const Vec2& p0, const Vec2& p1, CP color)
   {
-    
-    if(std::fabs(p1.X() - p0.X()) > std::abs(p1.Y() - p0.Y()))
-    {
-      //line is horizontal-ish
-      //making sure x0 < x1
-      if(p0.X() > p1.X())
-      {
-        Swap(p0, p1);
-      }
-
-      std::vector<float> ys = Interpolate(p0, p1);
-
-      for(int x = p0.iX(); x < p1.iX(); x++)
-      {
-        PutPixel(x, (int)ys[x - p0.iX()], color);
-      }
-    }
-    else
-    {
-      //line is vertical-ish
-      //making sure y0 < y1
-      if(p0.Y() > p1.Y())
-      {
-        Swap(p0, p1);
-      }
-
-      std::vector<float> xs = Interpolate(p0, p1);
-
-      for(int y = p0.iY(); y < p1.iY(); y++)
-      {
-        PutPixel((int)xs[y - p0.iY()], y, color);
-      }
-    }
-    
-    #ifdef DEBUG
-    std::cout << "Rendered a line: (" << x0 << ", " << y0 << ") -> (" << x1 << ", " << y1 << ")"
-      << std::endl;
-    #endif
+    PutLine(p0.X(), p0.Y(), p1.X(), p1.Y(), color); 
   }
 
   void PutLine(int x0, int y0, int x1, int y1, uint8_t r, uint8_t g, uint8_t b)
@@ -412,43 +375,7 @@ public:
  
 void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
   {
-    
-    if(std::fabs(p1.X() - p0.X()) > std::abs(p1.Y() - p0.Y()))
-    {
-      //line is horizontal-ish
-      //making sure x0 < x1
-      if(p0.X() > p1.X())
-      {
-        Swap(p0, p1);
-      }
-
-      std::vector<float> ys = Interpolate(p0, p1);
-
-      for(int x = p0.iX(); x < p1.iX(); x++)
-      {
-        PutPixel(x, (int)ys[x - p0.iX()], r, g, b);
-      }
-    }
-    else
-    {
-      //line is vertical-ish
-      //making sure y0 < y1
-      if(p0.Y() > p1.Y())
-      {
-        Swap(p0, p1);
-      }
-
-      std::vector<float> xs = Interpolate(p0, p1);
-
-      for(int y = p0.iY(); y < p1.iY(); y++)
-      {
-        PutPixel((int)xs[y - p0.iY()], y, r, g, b);
-      }
-    }
-    
-    #ifdef DEBUG
-    std::cout << "Rendered a line: " << p0 << " -> " << p1 << std::endl;
-    #endif
+    PutLine(p0.X(), p0.Y(), p1.X(), p1.Y(), r, g, b);
   }
 
   void PutWireframeTriangle(float x0, float y0, float x1, float y1, float x2, float y2, CP color)
@@ -465,14 +392,7 @@ void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
  
   void PutWireframeTriangle(const Vec2& p0, const Vec2& p1, const Vec2& p2, CP color)
   {
-    PutLine(p0, p1, color);
-    PutLine(p1, p2, color);
-    PutLine(p0, p2, color);
-    
-    #ifdef DEBUG
-    std::cout << "Rendered a wireframe-triangle: " << p0 << ", " << p1 <<
-    ", " << p2 << std::endl;
-    #endif
+    PutWireframeTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), color);
   }
 
   void PutWireframeTriangle(float x0, float y0, float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b)
@@ -489,14 +409,7 @@ void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
   
   void PutWireframeTriangle(const Vec2& p0, const Vec2& p1, const Vec2& p2, uint8_t r, uint8_t g, uint8_t b)
   {
-    PutLine(p0, p1, r, g, b);
-    PutLine(p1, p2, r, g, b);
-    PutLine(p0, p2, r, g, b);
-  
-    #ifdef DEBUG
-    std::cout << "Rendered a wireframe-triangle: " << p0 << ", " << p1 <<
-    ", " << p2 << std::endl;
-    #endif
+    PutWireframeTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), r, g, b);
   }
 
   void PutFilledTriangle(float x0, float y0, float x1, float y1, float x2, float y2, CP color)
@@ -572,55 +485,7 @@ void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
 
   void PutFilledTriangle(const Vec2& p0, const Vec2& p1, const Vec2& p2, CP color)
   {
-    if(p1.Y() < p0.Y())
-    {
-      Swap(p0, p1);
-    }
-
-    if(p2.Y() < p0.Y())
-    {
-      Swap(p0, p2);
-    }
-
-    if(p2.Y() < p1.Y())
-    {
-      Swap(p1, p2);
-    }
-
-    std::vector<float> x01 = Interpolate_(p0, p1);
-    std::vector<float> x12 = Interpolate_(p1, p2);
-    std::vector<float> x02 = Interpolate_(p0, p2);
-    
-    x01.pop_back();
-    x01.insert(x01.end(), x12.begin(), x12.end());
-    std::vector<float> x012 = x01;
-
-    std::vector<float> x_left;
-    std::vector<float> x_right;
-    int m = std::floor(x012.size()/2);
-    if(x02[m] < x012[m])
-    {
-      x_left = x02;
-      x_right = x012;
-    }
-    else
-    {
-      x_left = x012;
-      x_right = x02;
-    }
-
-    for(int y = (int)std::ceil(p0.Y()); y < (int)std::ceil(p2.Y()); y++)
-    {
-      for(int x = (int)x_left[y - p0.iY()]; x < (int)x_right[y - p0.iY()]; x++)
-      {
-        PutPixel(x, y, color);
-      }
-    }
-
-    #ifdef DEBUG
-    std::cout << "Rendered a filled-triangle: " << p0 << ", " << p1 <<
-    ", " << p2 << std::endl;
-    #endif
+    PutFilledTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), color);
   }
 
   void PutFilledTriangle(float x0, float y0, float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b)
@@ -696,43 +561,7 @@ void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
 
   void PutFilledTriangle(const Vec2& p0, const Vec2& p1, const Vec2& p2, uint8_t r, uint8_t g, uint8_t b)
   {
-    if(p1.Y() < p0.Y()){ Swap(p0, p1); }
-    if(p2.Y() < p0.Y()){ Swap(p0, p2); }
-    if(p2.Y() < p1.Y()){ Swap(p1, p2); }
-
-    std::vector<float> x01 = Interpolate_(p0, p1);
-    std::vector<float> x12 = Interpolate_(p1, p2);
-    std::vector<float> x02 = Interpolate_(p0, p2);
-    
-    x01.pop_back();
-    x01.insert(x01.end(), x12.begin(), x12.end());
-    std::vector<float> x012 = x01;
-
-    std::vector<float> x_left;
-    std::vector<float> x_right;
-    int m = std::floor(x012.size()/2);
-    if(x02[m] < x012[m])
-    {
-      x_left = x02;
-      x_right = x012;
-    }
-    else
-    {
-      x_left = x012;
-      x_right = x02;
-    }
-
-    for(int y = (int)std::ceil(p0.Y()); y < (int)std::ceil(p2.Y()); y++)
-    {
-      for(int x = (int)x_left[y - p0.iY()]; x < (int)x_right[y - p0.iY()]; x++)
-      {
-        PutPixel(x, y, r, g, b);
-      }
-    }
-
-    #ifdef DEBUG
-    std::cout << "Rendered a filled-triangle: " << p0 << ", " << p1 << ", " << p2 << std::endl;
-    #endif
+    PutFilledTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), r, g, b);
   }
 
   void BlitFramebuffer()

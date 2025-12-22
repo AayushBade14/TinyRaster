@@ -18,6 +18,8 @@ class Vec2
 {
   
 public:
+  //empty invalid class for error handling 
+  class Invalid{};
 
   //constructors for the vec2 class
   Vec2() : m_fX(0.0f),
@@ -60,8 +62,8 @@ public:
   int iX()const{return (int)m_fX; }
   int iY()const{return (int)m_fY; }
 
-  void X(float x)const{ m_fX = x; }
-  void Y(float y)const{ m_fY = y; }
+  void X(float x){ m_fX = x; }
+  void Y(float y){ m_fY = y; }
 
   //arithmetic operations
   
@@ -127,7 +129,7 @@ inline Vec2 Normalize(const Vec2& v)
 //method to get squared-norm of vec2 : |V|^2 = <V,V>
 inline float Norm2(const Vec2& v)
 {
-  return (pow(v.X(), 2) + pow(v.Y()));
+  return (pow(v.X(), 2) + pow(v.Y(), 2));
 }
 
 //method to get norm of vec2 : |V| = '/<V,V>
@@ -138,7 +140,7 @@ inline float Norm(const Vec2& v)
 }
 
 //method for swapping two vec2's
-void Swap(Vec2& v1, Vec2& v2)
+inline void Swap(Vec2& v1, Vec2& v2)
 {
   float tmp = v1.X();
   v1.X(v2.X());
@@ -150,7 +152,7 @@ void Swap(Vec2& v1, Vec2& v2)
 }
 
 //method for printing vec2 for debugging
-std::ostream& operator<<(std::ostream& os, const Vec2& v)const
+inline std::ostream& operator<<(std::ostream& os, const Vec2& v)
 {
   os << "(" << v.X() << ", " << v.Y() << ")";
   return os;
@@ -158,7 +160,7 @@ std::ostream& operator<<(std::ostream& os, const Vec2& v)const
 
 //---------------------------------Interpolation methods-------------------------------------
 
-std::vector<float> Interpolate(float i0, float d0, float i1, float d1)
+inline std::vector<float> Interpolate(float i0, float d0, float i1, float d1)
 {
   float epsilon = 0.0001f;
 
@@ -182,12 +184,12 @@ std::vector<float> Interpolate(float i0, float d0, float i1, float d1)
   return values;
 }
 
-std::vector<float> Interpolate(const Vec2& v1, const Vec2& v2)
+inline std::vector<float> Interpolate(const Vec2& v1, const Vec2& v2)
 {
   return Interpolate(v1.X(), v1.Y(), v2.X(), v2.Y());
 }
 
-std::vector<float> Interpolate_(const Vec2& v1, const Vec2& v2)
+inline std::vector<float> Interpolate_(const Vec2& v1, const Vec2& v2)
 {
   return Interpolate(v1.Y(), v1.X(), v2.Y(), v2.X());
 }

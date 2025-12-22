@@ -29,9 +29,14 @@ int main(void)
       uint8_t g = std::rand() % 256;
       uint8_t b = std::rand() % 256;
       
-      //fbo.PutLine(x0, y0, x1, y1, r, g, b); // rasterizes a line for specified two points and color
-      fbo.PutFilledTriangle(x0, y0, x1, y1, x2, y2, r, g, b);
-      fbo.PutWireframeTriangle(x0, y0, x1, y1, x2, y2, CP::BLACK);
+      //fbo.PutLine(x0, y0, x1, y1, r, g, b); // rasterizes a line for specified two points and color   
+      //using Vec2 class for creation of the points
+      Vec2 p0{(float)x0, (float)y0};
+      Vec2 p1{(float)x1, (float)y1};
+      Vec2 p2{(float)x2, (float)y2};
+
+      fbo.PutFilledTriangle(p0, p1, p2, r, g, b);
+      fbo.PutWireframeTriangle(p0, p1, p2, CP::BLACK);
     }
 
     fbo.BlitFramebuffer(); // blits the framebuffer to a .ppm file and stores it in the same directory 
