@@ -17,8 +17,8 @@ struct Vertex
 {
   Vec3 m_Position;
   Vec3 m_Color;
-  Vec3 m_Normal;
-  Vec2 m_TextureCoords;
+  //Vec3 m_Normal;
+  //Vec2 m_TextureCoords;
 };
 
 #endif

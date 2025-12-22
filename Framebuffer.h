@@ -16,6 +16,7 @@
 #include <cmath>
 #include "./Color.h"
 #include "./Math.h"
+#include "./Vertex.h"
 
 class Framebuffer
 {
@@ -379,7 +380,7 @@ public:
     }
 
     #ifdef DEBUG
-    std::cout << "Rendered a line: " << p0 << " -> " << p1 << std::endl;
+    std::cout << "Rendered a line: " << Vec2(x0, y0) << " -> " << Vec2(x1, y1) << std::endl;
     #endif
   }
  
@@ -603,7 +604,83 @@ public:
   {
     PutFilledTriangle(x0, y0, x1, y1, x2, y2, c.X(), c.Y(), c.Z()); 
   }
+  
+  void PutShadedTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2)
+  {
+    Vertex a = v0;
+    Vertex b = v1;
+    Vertex c = v2;
 
+    if(b.m_Position.Y() < a.m_Position.Y()){ Swap(a.m_Position, b.m_Position); }
+    if(c.m_Position.Y() < a.m_Position.Y()){ Swap(a.m_Position, c.m_Position); }
+    if(c.m_Position.Y() < b.m_Position.Y()){ Swap(b.m_Position, c.m_Position); }
+
+    std::vector<float> x01 = Interpolate_(a.m_Position.XY(), b.m_Position.XY());
+    std::vector<Vec3> c01 = InterpolateVec3(a.m_Position.Y(), a.m_Color, b.m_Position.Y(), b.m_Color);
+    
+    std::vector<float> x12 = Interpolate_(b.m_Position.XY(), c.m_Position.XY());
+    std::vector<Vec3> c12 = InterpolateVec3(b.m_Position.Y(), b.m_Color, c.m_Position.Y(), c.m_Color);
+    
+    std::vector<float> x02 = Interpolate_(a.m_Position.XY(), c.m_Position.XY());
+    std::vector<Vec3> c02 = InterpolateVec3(a.m_Position.Y(), a.m_Color, c.m_Position.Y(), c.m_Color);
+    
+    x01.pop_back();
+    x01.insert(x01.end(), x12.begin(), x12.end());
+    std::vector<float> x012 = x01;
+
+    c01.pop_back();
+    c01.insert(c01.end(), c12.begin(), c12.end());
+    std::vector<Vec3> c012 = c01;
+    
+    std::vector<float> x_left;
+    std::vector<Vec3> c_left;
+
+    std::vector<float> x_right;
+    std::vector<Vec3> c_right;
+
+    int m = std::floor(x012.size() / 2);
+    if(x02[m] < x012[m])
+    {
+      x_left = x02;
+      c_left = c02;
+
+      x_right = x012;
+      c_right = c012;
+    }
+    else
+    {
+      x_left = x012;
+      c_left = c012;
+
+      x_right = x02;
+      c_right = c02;
+    }
+    
+    int y_start = (int)std::ceil(a.m_Position.iY());
+
+    for(int y = y_start; y < (int)std::ceil(c.m_Position.iY()); y++)
+    {
+      int i = y - y_start;
+
+      float x_l = x_left[i];
+      float x_r = x_right[i];
+
+      Vec3 col_l = c_left[i];
+      Vec3 col_r = c_right[i];
+
+      int x_start = (int)std::ceil(x_l);
+      int x_end = (int)std::ceil(x_r);
+
+      for(int x = x_start; x < x_end; x++)
+      {
+        float t = ((float)x - x_l) / (x_r - x_l);
+        Vec3 color = Lerp(col_l, col_r, t);
+
+        PutPixel(x, y, color);
+      }
+    }
+  }
+  
   void BlitFramebuffer()
   {
     std::string name = "../frame_" + std::to_string(m_iBlitNum++) + ".ppm";

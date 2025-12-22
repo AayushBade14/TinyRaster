@@ -165,6 +165,13 @@ public:
   float X()const{ return m_fX; }
   float Y()const{ return m_fY; }
   float Z()const{ return m_fZ; }
+  
+  Vec2 XY()const{ return Vec2(m_fX, m_fY); }
+  Vec2 YX()const{ return Vec2(m_fY, m_fX); }
+  Vec2 YZ()const{ return Vec2(m_fY, m_fZ); }
+  Vec2 ZY()const{ return Vec2(m_fZ, m_fY); }
+  Vec2 XZ()const{ return Vec2(m_fX, m_fZ); }
+  Vec2 ZX()const{ return Vec2(m_fZ, m_fX); }
 
   //getters for returning truncated x, y and z values
   int iX()const{ return (int)m_fX; }
@@ -355,6 +362,27 @@ inline std::vector<float> Interpolate(const Vec2& v1, const Vec2& v2)
 inline std::vector<float> Interpolate_(const Vec2& v1, const Vec2& v2)
 {
   return Interpolate(v1.Y(), v1.X(), v2.Y(), v2.X());
+}
+
+inline Vec3 Lerp(const Vec3& a, const Vec3& b, float t)
+{
+  return a + (b - a) * t;
+}
+
+inline std::vector<Vec3> InterpolateVec3(float y0, const Vec3& c0, float y1, const Vec3& c1)
+{
+  std::vector<Vec3> result;
+
+  int dy = (int)std::ceil(y1) - (int)std::ceil(y0);
+  if(dy <= 0) return result;
+
+  for(int i = 0; i <= dy; i++)
+  {
+    float t = (float)i / (float)dy;
+    result.push_back(Lerp(c0, c1, t));
+  }
+
+  return result;
 }
 
 #endif
