@@ -1,5 +1,5 @@
-#ifndef COLOR_H
-#define COLOR_H
+#ifndef TINYRASTER_COLOR_H
+#define TINYRASTER_COLOR_H
 //----------------------------------------------------------
 //  
 //  Name: Color.h

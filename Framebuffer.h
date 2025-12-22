@@ -1,5 +1,5 @@
-#ifndef FRAMEBUFFER_H
-#define FRAMEBUFFER_H
+#ifndef TINYRASTER_FRAMEBUFFER_H
+#define TINYRASTER_FRAMEBUFFER_H
 //--------------------------------------------------------------------
 //  
 //  Name: Framebuffer.h
