@@ -86,7 +86,22 @@ public:
 
   //dot-product method
   float Dot(const Vec2& other) { return ((m_fX * other.m_fX) + (m_fY * other.m_fY)); }
-
+  
+  //operator overloading for indexing vec2
+  float operator[](int index)
+  {
+    switch(index)
+    {
+      case 0:
+        return m_fX;
+      case 1:
+        return m_fY;
+      default:
+        throw Invalid{};
+    }
+    
+  }
+  
 private:
 
   float m_fX;
