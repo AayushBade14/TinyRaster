@@ -260,6 +260,16 @@ public:
     #endif
   }
 
+  void PutPixel(const Vec2& v, const Vec3& c)
+  {
+    PutPixel(v, c.X(), c.Y(), x.Z());
+  }
+
+  void PutPixel(int x, int y, const Vec3& c)
+  {
+    PutPixel(x, y, c.X(), x.Y(), x.Z());
+  }
+  
   void PutLine(float x0, float y0, float x1, float y1, CP color)
   {
     
@@ -373,11 +383,21 @@ public:
     #endif
   }
  
-void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
+  void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
   {
     PutLine(p0.X(), p0.Y(), p1.X(), p1.Y(), r, g, b);
   }
+  
+  void PutLine(const Vec2& p0, const Vec2& p1, const Vec3& c)
+  {
+    PutLine(p0.X(), p0.Y(), p1.X(), p1.Y(), c.X(), c.Y(), c.Z());
+  }
 
+  void PutLine(float x0, float y0, float x1, float y1, const Vec3& c)
+  {
+    PutLine(x0, y0, x1, y1, c.X(), c.Y(), c.Z());
+  }
+  
   void PutWireframeTriangle(float x0, float y0, float x1, float y1, float x2, float y2, CP color)
   {
     PutLine(x0, y0, x1, y1, color);
@@ -411,7 +431,17 @@ void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
   {
     PutWireframeTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), r, g, b);
   }
-
+  
+  void PutWireframeTriangle(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec3& c)
+  {
+    PutWireframeTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), c.X(), c.Y(), c.Z());
+  }
+  
+  void PutWireframeTriangle(float x0, float y0, float x1, float y1, float x2, float y2, const Vec3& c)
+  {
+    PutWireframeTriangle(x0, y0, x1, y1, x2, y2, c.X(), c.Y(), c.Z());
+  }
+  
   void PutFilledTriangle(float x0, float y0, float x1, float y1, float x2, float y2, CP color)
   {
     if(y1 < y0)
@@ -487,7 +517,12 @@ void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
   {
     PutFilledTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), color);
   }
-
+  
+  void PutFilledTriangle(const Vec2& p0, const Vec2& p1, const Vec2& p2, const Vec3& c)
+  {
+    PutFilledTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), c.X(), c.Y(), c.Z());
+  }
+  
   void PutFilledTriangle(float x0, float y0, float x1, float y1, float x2, float y2, uint8_t r, uint8_t g, uint8_t b)
   {
     if(y1 < y0)
@@ -562,6 +597,11 @@ void PutLine(const Vec2& p0, const Vec2& p1, uint8_t r, uint8_t g, uint8_t b)
   void PutFilledTriangle(const Vec2& p0, const Vec2& p1, const Vec2& p2, uint8_t r, uint8_t g, uint8_t b)
   {
     PutFilledTriangle(p0.X(), p0.Y(), p1.X(), p1.Y(), p2.X(), p2.Y(), r, g, b);
+  }
+  
+  void PutFilledTriangle(float x0, float y0, float x1, float y1, float x2, float y2, const Vec3& c)
+  {
+    PutFilledTriangle(x0, y0, x1, y1, x2, y2, c.X(), c.Y(), c.Z()); 
   }
 
   void BlitFramebuffer()
