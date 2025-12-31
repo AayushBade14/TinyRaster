@@ -8,8 +8,9 @@ int main(void)
  
   try
   {
+    /*
     Framebuffer fbo(1024, 1024); // initalizing a framebuffer of width and height 1024px
-    fbo.ClearFramebuffer(CP::BLACK); // clearning the framebuffer with white color
+    fbo.ClearFramebuffer(CP::WHITE); // clearning the framebuffer with white color
     
     for(int i = 0; i < 10; i++){
       int x0 = std::rand() % fbo.Width();
@@ -52,8 +53,15 @@ int main(void)
     //Vertex v2 = {{400.0f, 899.0f, 0.0f}, {0.0f, 0.0f, 255.0f}};
 
     //fbo.PutShadedTriangle(v0, v1, v2);
+    fbo.BlitFramebuffer();
+    */
 
-    fbo.BlitFramebuffer(); // blits the framebuffer to a .ppm file and stores it in the same directory 
+    Mat4 i(2.0f);
+    Vec4 v(1.0f, 2.0f, 3.0f, 4.0f);
+    
+    Vec4 v1 = i * v;
+    
+    std::cout << "(" << v1.X() << ", " << v1.Y() << ", " << v1.Z() << ", " << v1.W() << ")" << std::endl;
   }
   catch(Color::Invalid)
   {

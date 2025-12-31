@@ -236,6 +236,247 @@ private:
   float m_fZ;
 };
 
+class Vec4{
+  
+public:
+  //empty invalid class for error handling 
+  class Invalid{};
+
+  //constructors for the vec3 class
+  Vec4() : m_fX(0.0f),
+           m_fY(0.0f),
+           m_fZ(0.0f),
+           m_fW(1.0f)
+  {}
+
+  Vec4(float x, float y, float z, float w) : m_fX(x),
+                           m_fY(y),
+                           m_fZ(z),
+                           m_fW(w)
+  {}
+  
+  Vec4(const Vec3& v, float w) : m_fX(v.X()),
+                                 m_fY(v.Y()),
+                                 m_fZ(v.Z()),
+                                 m_fW(w)
+  {}
+
+  //destructor for the vec3 class
+  ~Vec4()=default;
+
+  //copy constructor and assignment for vec3 class
+  Vec4(const Vec4& other) : m_fX(other.m_fX),
+                            m_fY(other.m_fY),
+                            m_fZ(other.m_fZ),
+                            m_fW(other.m_fW)
+  {}
+  
+  Vec4& operator=(const Vec4& other)
+  {
+    if(this == &other)
+    {
+      return *this;
+    }
+
+    m_fX = other.m_fX;
+    m_fY = other.m_fY;
+    m_fZ = other.m_fZ;
+    m_fW = other.m_fW;
+
+    return *this;
+  }
+  
+  //move constructor and assignment operator not required as we are not allocating anything
+  //on the heap memory.
+  
+  //getters and setters
+  float X()const{ return m_fX; }
+  float Y()const{ return m_fY; }
+  float Z()const{ return m_fZ; }
+  float W()const{ return m_fW; }
+  
+  Vec2 XY()const{ return Vec2(m_fX, m_fY); }
+  Vec2 YX()const{ return Vec2(m_fY, m_fX); }
+  Vec2 YZ()const{ return Vec2(m_fY, m_fZ); }
+  Vec2 ZY()const{ return Vec2(m_fZ, m_fY); }
+  Vec2 XZ()const{ return Vec2(m_fX, m_fZ); }
+  Vec2 ZX()const{ return Vec2(m_fZ, m_fX); }
+  Vec2 XW()const{ return Vec2(m_fX, m_fW); }
+  Vec2 WX()const{ return Vec2(m_fW, m_fX); }
+  Vec2 YW()const{ return Vec2(m_fY, m_fW); }
+  Vec2 WY()const{ return Vec2(m_fW, m_fY); }
+  Vec2 ZW()const{ return Vec2(m_fZ, m_fW); }
+  Vec2 WZ()const{ return Vec2(m_fW, m_fZ); }
+
+  Vec3 XYZ()const{ return Vec3(m_fX, m_fY, m_fZ); }
+  Vec3 XZY()const{ return Vec3(m_fX, m_fZ, m_fY); }
+  Vec3 YXZ()const{ return Vec3(m_fY, m_fX, m_fZ); }
+  Vec3 YZX()const{ return Vec3(m_fY, m_fZ, m_fX); }
+  Vec3 ZXY()const{ return Vec3(m_fZ, m_fX, m_fY); }
+  Vec3 ZYX()const{ return Vec3(m_fZ, m_fY, m_fX); }
+  
+  //getters for returning truncated x, y and z values
+  int iX()const{ return (int)m_fX; }
+  int iY()const{ return (int)m_fY; }
+  int iZ()const{ return (int)m_fZ; }
+  int iW()const{ return (int)m_fW; }
+
+  void X(float x){ m_fX = x; }
+  void Y(float y){ m_fY = y; }
+  void Z(float z){ m_fZ = z; }
+  void W(float w){ m_fW = w; }
+
+  //arithmetic operations
+  
+  //addition operations
+  Vec4 operator+(const Vec4& other)const{ return Vec4(m_fX + other.m_fX, m_fY + other.m_fY, m_fZ + other.m_fZ, m_fW + other.m_fW); }
+  Vec4& operator+=(const Vec4& other){ m_fX += other.m_fX; m_fY += other.m_fY; m_fZ += other.m_fZ; m_fW += other.m_fW; return *this;}
+
+  //subtraction operations
+  Vec4 operator-(const Vec4& other)const{ return Vec4(m_fX - other.m_fX, m_fY - other.m_fY, m_fZ - other.m_fZ, m_fW - other.m_fW); }
+  Vec4& operator-=(const Vec4& other){ m_fX -= other.m_fX; m_fY -= other.m_fY; m_fZ -= other.m_fZ; m_fW -= other.m_fW; return *this;}
+  
+  //scalar multiplications
+  Vec4 operator*(float val)const{ return Vec4(m_fX * val, m_fY * val, m_fZ * val, m_fW * val); }
+  Vec4 operator*=(float val){ m_fX *= val; m_fY *= val; m_fZ *= val; m_fW *= val; return *this;}
+
+  //vector-vector multiplications
+  Vec4 operator*(const Vec4& other)const{ return Vec4(m_fX * other.m_fX, m_fY * other.m_fY, m_fZ * other.m_fZ, m_fW * other.m_fW); }
+  Vec4& operator*=(const Vec4& other){ m_fX *= other.m_fX; m_fY *= other.m_fY; m_fZ *= other.m_fZ; m_fW *= other.m_fW; return *this; }
+
+  //scalar division operations
+  Vec4 operator/(float val)const{ return Vec4(m_fX / val, m_fY / val, m_fZ / val, m_fW / val); }
+  Vec4& operator/=(float val){ m_fX /= val; m_fY /= val; m_fZ /= val; m_fW /= val; return *this; }
+
+  //vector-vector divisions
+  Vec4 operator/(const Vec4& other)const{ return Vec4(m_fX / other.m_fX, m_fY / other.m_fY, m_fZ / other.m_fZ, m_fW / other.m_fW); }
+  Vec4& operator/=(const Vec4& other){ m_fX /= other.m_fX; m_fY /= other.m_fY; m_fZ /= other.m_fZ; m_fW /= other.m_fW; return *this; }
+
+  //dot-product method
+  float Dot(const Vec4& other)const { return ((m_fX * other.m_fX) + (m_fY * other.m_fY) + (m_fZ * other.m_fZ) + (m_fW * other.m_fW)); }
+  
+  //operator overloading for indexing vec2
+  float operator[](int index)
+  {
+    switch(index)
+    {
+      case 0:
+        return m_fX;
+      case 1:
+        return m_fY;
+      case 2:
+        return m_fZ;
+      case 3:
+        return m_fW;
+      default:
+        throw Invalid{};
+    }
+    
+  }
+
+  
+private:
+
+  float m_fX;
+  float m_fY;
+  float m_fZ;
+  float m_fW;
+};
+
+class Mat4
+{
+
+public:
+  
+  class Invalid{};
+
+  float m_Mat[4][4];
+  
+  Mat4()
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      for(int j = 0; j < 4; j++)
+      {
+        if(i == j) m_Mat[i][j] = 1.0f;
+        else m_Mat[i][j] = 0.0f;
+      }
+    }
+  }
+ 
+  Mat4(float t)
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      for(int j = 0; j < 4; j++)
+      {
+        if(i == j) m_Mat[i][j] = t;
+        else m_Mat[i][j] = 0.0f;
+      }
+    }
+  }
+
+  ~Mat4() = default;
+  
+  //copy constructor and copy assignment
+  Mat4(const Mat4& other)
+  {
+    for(int i = 0; i < 4; i++)
+    {
+      for(int j = 0; j < 4; j++)
+      {
+        m_Mat[i][j] = other.m_Mat[i][j];
+      }
+    }
+  }
+  
+  Mat4 operator=(const Mat4& other)
+  {
+    if(this == &other) return *this;
+
+    for(int i = 0; i < 4; i++)
+    {
+      for(int j = 0; j < 4; j++)
+      {
+        m_Mat[i][j] = other.m_Mat[i][j];
+      }
+    }
+
+    return *this;
+  }
+
+  Vec4 GetRow(int index)
+  {
+    if(index > 3) throw Invalid{};
+
+    return Vec4(m_Mat[index][0], m_Mat[index][1], m_Mat[index][2], m_Mat[index][3]);
+  }
+  
+  Vec4 GetColumn(int index)
+  {
+    if(index > 3) throw Invalid{};
+
+    return Vec4(m_Mat[0][index], m_Mat[1][index], m_Mat[2][index], m_Mat[3][index]);
+  }
+  
+  Vec4 operator*(const Vec4& other)
+  {
+    return Vec4(GetRow(0).Dot(other), GetRow(1).Dot(other), GetRow(2).Dot(other), GetRow(3).Dot(other));
+  }
+  
+  static Mat4 Identity()
+  {
+    Mat4 r = {};
+    
+    r.m_Mat[0][0] = 1.0f;
+    r.m_Mat[1][1] = 1.0f;
+    r.m_Mat[2][2] = 1.0f;
+    r.m_Mat[3][3] = 1.0f;
+    
+    return r;
+  }  
+};
+
 //--------------------------------------vec2 methods------------------------------------------
 
 //operator overloading for bi-directional operations
