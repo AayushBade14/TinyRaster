@@ -464,6 +464,22 @@ public:
     return Vec4(GetRow(0).Dot(other), GetRow(1).Dot(other), GetRow(2).Dot(other), GetRow(3).Dot(other));
   }
   
+  Mat4 operator*(Mat4& other)
+  {
+    Mat4 result(0.0f); // initialize all to 0
+
+    for(int i = 0; i < 4; i++)
+    {
+      for(int j = 0; j < 4; j++)
+      {
+        result.m_Mat[i][j] =
+        GetRow(i).Dot(other.GetColumn(j));
+      }
+    }
+
+    return result;
+  }
+  
   static Mat4 Identity()
   {
     Mat4 r = {};
