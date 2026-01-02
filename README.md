@@ -1,5 +1,6 @@
 # TinyRaster
 
+![Rasterizer-Rotating-Cube](./TinyRasterDemo.gif)
 ![Rasterizer-Output-0](./triangle_shaded_raster2.png)
 ![Rasterizer-Output-1](./triangle_shaded_raster1.png)
 ![Rasterizer-Output-2](./triangle_raster0.png)
