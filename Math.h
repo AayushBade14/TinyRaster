@@ -211,6 +211,8 @@ public:
   //dot-product method
   float Dot(const Vec3& other)const { return ((m_fX * other.m_fX) + (m_fY * other.m_fY) + (m_fZ * other.m_fZ)); }
   
+  //cross-product method
+  Vec3 Cross(const Vec3& other)const { return Vec3(((m_fY * other.m_fZ) - (m_fZ * other.m_fY)), ((m_fZ * other.m_fX) - (m_fX * other.m_fZ)), ((m_fX * other.m_fY) - (m_fY * other.m_fX))); }
   //operator overloading for indexing vec2
   float operator[](int index)
   {

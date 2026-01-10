@@ -1,6 +1,7 @@
 # TinyRaster
 
-![Rasterizer-Rotating-Cube](./TinyRasterDemo.gif)
+![Rasterizer-Rotating-Cube-Perspective](./TinyRasterDemo1.gif)
+![Rasterizer-Rotating-Cube-Orthographic](./TinyRasterDemo.gif)
 ![Rasterizer-Output-0](./triangle_shaded_raster2.png)
 ![Rasterizer-Output-1](./triangle_shaded_raster1.png)
 ![Rasterizer-Output-2](./triangle_raster0.png)
@@ -13,6 +14,8 @@
 - Supports **Line Rasterization**
 - Supports **Triangle Rasterization**
 - Supports **Vertex Attribute Interpolation**.
+- Supports **Perspective** and **Orthographic** projections
+- Supports **Camera transformations**
 - Output is directly written to a PPM file
 
 ### Further Developments
